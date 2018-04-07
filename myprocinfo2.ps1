@@ -15,9 +15,9 @@
 function menu(){
 
 write-host "
-1 - Hvem er jeg og hva er navnet på dette scriptet? `n
+1 - Hvem er jeg og hva er navnet pÃ¥ dette scriptet? `n
 2 - Hvor lenge er det siden siste boot? `n
-3 - Hvor mange prosesser og tråder finnes? `n
+3 - Hvor mange prosesser og trÃ¥der finnes? `n
 4 - Hvor mange context switcer fant sted siste sekund? `n
 5 - Hvor stor andel av CPU-tiden ble benyttet i kernelmode og i usermode siste sekund? `n
 6 - Hvor mange interrupts fant sted siste sekund? `n
@@ -26,20 +26,20 @@ Velg en funksjon:
 "
 
 }
-# 1 - Hvem er jeg og hva er navnet på dette scriptet?
+# 1 - Hvem er jeg og hva er navnet pÃ¥ dette scriptet?
 function whoami(){
-    Write-Host "Navnet på dette scriptet er: "$MyInvocation.ScriptName "Navnet på brukeren er: $([System.Security.Principal.WindowsIdentity]::GetCurrent().Name) "
+    Write-Host "Navnet pÃ¥ dette scriptet er: "$MyInvocation.ScriptName "Navnet pÃ¥ brukeren er: $([System.Security.Principal.WindowsIdentity]::GetCurrent().Name) "
 }
 
 # 2 - Hvor lenge er det siden siste boot?
-function uptime(){                         # Funksjonen er lånt fra https://4sysops.com/archives/calculating-system-uptime-with-powershell/
+function uptime(){                         # Funksjonen er lÃ¥nt fra https://4sysops.com/archives/calculating-system-uptime-with-powershell/
    $os = Get-WmiObject win32_operatingsystem
    $uptime = (Get-Date) - ($os.ConvertToDateTime($os.lastbootuptime))
    $Display = "Uptime: " + $Uptime.Days + " days, " + $Uptime.Hours + " hours, " + $Uptime.Minutes + " minutes" 
    Write-Output $Display
 }
 
-#3 - Hvor mange prosesser og tråder finnes?
+#3 - Hvor mange prosesser og trÃ¥der finnes?
 function processes(){
 $processes=0
 $threads=0
@@ -49,7 +49,7 @@ foreach($i in $(get-process)) {
 foreach($n in $(Get-WmiObject win32_thread)){
     $threads = $threads + 1
 }
-write-host "Det finnes $processes prosseser og $threads antall tråder"
+write-host "Det finnes $processes prosseser og $threads antall trÃ¥der"
 
 }
 
@@ -75,7 +75,8 @@ Write-Host "Av den totale CPU tiden ble $kernel % av tiden brukt i kernelmode og
 # 6 - Hvor mange interrupts fant sted siste sekund?
 function interrupts() {
 
-$interrupts=$($(Get-Counter -Counter "\Prosess(_total)\Interrupts/sec").CounterSamples | Format-Table CookedValue  -AutoSize -hidetableheaders | Out-String)
+$interrupts=(Get-Counter -Counter "\Prosess(_total)\Interrupts/sec").CounterSamples | Format-Table CookedValue  -AutoSize -hidetableheaders | Out-String
+#$interrupts=$($(Get-Counter -Counter "\Prosess(_total)\Interrupts/sec").CounterSamples | Format-Table CookedValue  -AutoSize -hidetableheaders | Out-String)
 $interrupts= $interrupts -replace "`r`n|",""
 Write-Host "Det var $interrupts interrupts sist sekund"
 
